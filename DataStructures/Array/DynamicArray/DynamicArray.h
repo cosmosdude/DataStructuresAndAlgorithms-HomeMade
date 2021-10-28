@@ -75,6 +75,16 @@ public:
 		memset(this->elements, 0, sz*sizeof(Element));
 	}
 
+	// initialize the array of given size with default value.
+	explicit DynamicArray(const size_t sz, const Element &default_value):
+	// firstly of all, allocate and zero initialize
+	DynamicArray(sz)
+	{
+		// assign the value to every elements
+		for(int i = 0; i < size(); i++) 
+			this->elements[i] = default_value;
+	}
+
 	#pragma mark Destructor
 	~DynamicArray() {
 		// delete the elements.
@@ -115,7 +125,7 @@ public:
 		// increase the size
 		array_size++;
 	}
-	
+
 	// append given element at the end of the list.
 	void append(const Element &item) {
 		// if the capacity reached, increase it.
