@@ -19,11 +19,14 @@
 template<typename Element>
 class StaticArray {
 protected:
+	// underlying array elements buffer
 	Element* elements;
-	size_t _size;
+	// size of the array
+	size_t array_size;
 
+	// check and throw if the indexing is invalid.
 	void throw_if_invalid_indexing(int index) const {
-		if (index < 0 and index >= int(size()))
+		if (index < 0 or index >= int(size()))
 			throw "Array Index Out Of Bound";
 	}
 public:
@@ -36,7 +39,7 @@ public:
 	// - size: Size of the array.
 	explicit StaticArray(size_t size):
 	// remember the size
-	_size{size},
+	array_size{size},
 	// allocate require capacity
 	elements{new Element[size]}
 	{
@@ -49,7 +52,7 @@ public:
 	// @params:
 	//	- size: Size of the array
 	//	- default_value: Default value for each slot of the array.
-	explicit StaticArray(size_t size, Element default_value):
+	explicit StaticArray(size_t size, const Element &default_value):
 	// allocate and initialize zero
 	StaticArray(size) 
 	{
@@ -60,7 +63,7 @@ public:
 
 	// Initialize a static array with list provided by the compiler.
 	//
-	StaticArray(std::initializer_list<Element> list):
+	StaticArray(const std::initializer_list<Element>& list):
 	// allocate and initialize zero
 	StaticArray(list.size())
 	{
@@ -85,7 +88,7 @@ public:
 			// dealloc old elements
 			delete[] this->elements;
 			// change the size
-			_size = rvalue.size();
+			array_size = rvalue.size();
 			// and reallocate new elements
 			this->elements = new Element[rvalue.size()];
 		}
@@ -101,7 +104,7 @@ public:
 	// Move constructor
 	StaticArray(StaticArray<Element>&& array) {
 		// steal properties
-		this->_size = array.size();
+		this->array_size = array.size();
 		this->elements = array.elements;
 
 		// invalidate rvalue
@@ -113,7 +116,7 @@ public:
 	// Move assignment
 	virtual StaticArray<Element>& operator=(StaticArray<Element>&& rvalue) {
 		std::cout << "Moved =" << std::endl;
-		this->_size = rvalue.size();
+		this->array_size = rvalue.size();
 		this->elements = rvalue.elements;
 		rvalue.elements = nullptr;
 		return *this;
@@ -176,7 +179,7 @@ public:
 	//
 	// Complexity: O(1)
 	size_t size() const noexcept {
-		return this->_size;
+		return this->array_size;
 	}
 };
 
