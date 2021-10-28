@@ -110,6 +110,7 @@ public:
 		// invalidate rvalue
 		// so that the pointer wont get deleted when the
 		// rvalue is deallocated.
+		array.array_size = 0;
 		array.elements = nullptr;
 	}
 
@@ -118,6 +119,9 @@ public:
 		std::cout << "Moved =" << std::endl;
 		this->array_size = rvalue.size();
 		this->elements = rvalue.elements;
+
+		// invalide rvalue
+		rvalue.array_size = 0
 		rvalue.elements = nullptr;
 		return *this;
 	}
@@ -180,6 +184,12 @@ public:
 	// Complexity: O(1)
 	size_t size() const noexcept {
 		return this->array_size;
+	}
+
+	// test if the array is empty
+	bool is_empty() const noexcept {
+		// if the size is zero, it's true
+		return not size();
 	}
 };
 
