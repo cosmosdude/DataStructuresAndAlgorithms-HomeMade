@@ -52,6 +52,8 @@ private:
 			this->elements, 
 			sizeof(Element)*size()
 		);	 
+		// release old memory
+		delete[] this->elements;
 		// retain the new buffer
 		this->elements = new_buffer;
 	}
@@ -215,7 +217,12 @@ public:
 	}
 
 	#pragma mark Modifiers
+
 	// Append given element at the start of the list.
+	//
+	// Time Complexity
+	// worse: O(n)
+	// avg: O(n)
 	void prepend(const Element &item) noexcept {
 		// if the capacity reached, increase it.
 		if (is_capacity_reached()) increase_capacity();
@@ -227,7 +234,12 @@ public:
 		array_size++;
 	}
 
+
 	// append given element at the end of the list.
+	//
+	// complexity
+	// worst: O(n)
+	// avg: O(1)
 	void append(const Element &item) noexcept {
 		// if the capacity reached, increase it.
 		if(is_capacity_reached()) increase_capacity();
@@ -241,6 +253,7 @@ public:
 	// Insertion position should be valid.
 	// i.e 0 <= position <= size
 	//
+	// O(n)
 	void insert(const Element& item, int position) {
 		// throw if the insertion index is invalid
 		throw_if_invalid_indexing(position);
