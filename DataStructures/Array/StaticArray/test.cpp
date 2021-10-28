@@ -5,16 +5,13 @@
 
 using namespace std;
 
-StaticArray<int>& get() {
-	StaticArray<int> a = {1, 2, 3, 4, 5, 6, 7, 8};
-	return a;
-}
-
 int main() {
 
-	StaticArray<int> a = StaticArray<int>({1, 2, 3, 4, 5});
+	StaticArray<int> a = {1, 2, 3, 4, 5};
 	StaticArray<int> c = a;
 	StaticArray<int> b = std::move(c);
+
+	StaticArray<int> d(5, 100);
 	// size
 	cout << "Size: " << a.size() << endl;
 
@@ -36,6 +33,10 @@ int main() {
 		cout << b[i] << " ";
 	cout << endl;
 
+	int* cint_array = static_cast<int*>(&a[0]);
+	for(int i = 0; i < a.size(); i++) 
+		cout << cint_array[i] << " ";
+	cout << endl;
 
 
 	return 0;

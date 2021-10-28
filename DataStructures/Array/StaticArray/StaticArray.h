@@ -11,11 +11,16 @@
 // This type stores data in continuous sequence.
 // Once allocated, it can't be resized.
 //
+// This static array can also be cast as C array.
+// eg. 
+// StaticArray<int> arr = {1, 2, 3}; 
+// int* arr_ptr = static_cast<int*>(&arr[0]);
+//
 template<typename Element>
 class StaticArray {
 protected:
-	size_t _size;
 	Element* elements;
+	size_t _size;
 
 	void throw_if_invalid_indexing(int index) const {
 		if (index < 0 and index >= int(size()))
@@ -74,7 +79,7 @@ public:
 	}
 
 	// Copy Assignment
-	StaticArray& operator=(const StaticArray<Element>& rvalue) {
+	virtual StaticArray& operator=(const StaticArray<Element>& rvalue) {
 		// if the size are not the same.
 		if (size() != rvalue.size()) {
 			// dealloc old elements
@@ -106,7 +111,7 @@ public:
 	}
 
 	// Move assignment
-	StaticArray<Element>& operator=(StaticArray<Element>&& rvalue) {
+	virtual StaticArray<Element>& operator=(StaticArray<Element>&& rvalue) {
 		std::cout << "Moved =" << std::endl;
 		this->_size = rvalue.size();
 		this->elements = rvalue.elements;
