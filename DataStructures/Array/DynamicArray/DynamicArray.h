@@ -25,7 +25,7 @@ private:
 	void throw_if_invalid_indexing(int index) const {
 		// if the index out of bound, throw exception
 		if (index < 0 or index >= array_size) 
-			throw std::out_of_range("Array access index out of bound");
+			throw std::out_of_range("[Exception]: Array access index out of bound");
 	}
 
 	size_t remaining_capacity() const noexcept {
@@ -213,7 +213,6 @@ public:
 		// if the size is zero, it's true
 		return not size();
 	}
-
 
 	#pragma mark Modifiers
 	// Append given element at the start of the list.
