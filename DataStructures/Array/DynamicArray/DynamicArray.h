@@ -85,6 +85,13 @@ public:
 			this->elements[i] = default_value;
 	}
 
+	DynamicArray(const std::initializer_list<Element>& list):
+	// firstly of all, allocate and zero initialize
+	DynamicArray(list.size())
+	{
+		std::copy(list.begin(), list.end(), this->elements);
+	}
+
 	#pragma mark Destructor
 	~DynamicArray() {
 		// delete the elements.
