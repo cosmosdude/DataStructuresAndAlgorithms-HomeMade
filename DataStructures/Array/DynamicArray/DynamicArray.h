@@ -116,7 +116,7 @@ public:
 
 	#pragma mark Copy Assignment
 	// Copy Assignment
-	virtual DynamicArray& operator=(const DynamicArray<Element>& rvalue) {
+	DynamicArray& operator=(const DynamicArray<Element>& rvalue) {
 		// if the current array's capacity
 		// is not enough to copy everything from the rvalue
 		if (capacity() < rvalue.capacity()) {
@@ -158,7 +158,7 @@ public:
 
 	#pragma mark Move Constructor
 	// Move assignment
-	virtual DynamicArray<Element>& operator=(DynamicArray<Element>&& rvalue) {
+	DynamicArray<Element>& operator=(DynamicArray<Element>&& rvalue) {
 		this->array_capacity = rvalue.capacity();
 		this->array_size = rvalue.size();
 		this->elements = rvalue.elements;
@@ -180,24 +180,43 @@ public:
 	}
 
 	#pragma mark Accessers
+
+	// Mutating accessor.
+	// Get the element at the index
+	// or mutate the element at the index.
+	//
+	// Can throw array access index out of bound exception.
+	Element& at(int index) {
+		throw_if_invalid_indexing(index);
+		// return address to the element.
+		return this->elements[index];
+	}
+
 	// Mutating subscript
 	// Get the element at the index
 	// or mutate the element at the index.
 	//
 	// Can throw array access index out of bound exception.
 	Element& operator[](int index) {
+		return this->at(index);
+	}
+
+
+	// Nonmutating accessor.
+	// Get the element at the index.
+	//
+	// Can throw array access index out of bound exception.
+	Element at(int index) const {
 		throw_if_invalid_indexing(index);
 		// return address to the element.
 		return this->elements[index];
 	}
-
-	// Nonmutating
-	// Get the element at the index
+	// Nonmutating subscript.
+	// Get the element at the index.
 	//
 	// Can throw array access index out of bound exception.
 	Element operator[](int index) const {
-		throw_if_invalid_indexing(index);
-		return this->elements[index];
+		return this->at(index);
 	}
 
 	// Return the current size of the array.
