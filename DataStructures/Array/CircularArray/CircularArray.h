@@ -17,11 +17,18 @@ template<typename Element>
 class CircularArray: public DynamicArray<Element> {
 	using DynamicArray<Element>::DynamicArray;
 private:
+	// check and throw if the array is empty.
 	void throw_if_empty() {
 		if (this->is_empty()) 
 			throw std::out_of_range("Unable to index empty circular array.");
 	}
 public:
+
+	// Get the item by index
+	// 
+	// If the array is empty, exception is thrown.
+	// Otherwise, element from mod index is returned.
+	// Negative index results in elements from the rear.
 	Element operator[](int index) const {
 		// throw if the array is empty
 		throw_if_empty();
@@ -34,6 +41,11 @@ public:
 		return this->at(index);
 	}
 
+	// Get the item by index
+	// 
+	// If the array is empty, exception is thrown.
+	// Otherwise, element from mod index is returned.
+	// Negative index results in elements from the rear.
 	Element& operator[](int index) {
 		// throw if the array is empty
 		throw_if_empty();

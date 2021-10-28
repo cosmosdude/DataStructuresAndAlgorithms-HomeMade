@@ -6,43 +6,28 @@
 
 using namespace std;
 
-void assertion_failure(const string &what) {
-	cout << "[Assertion]-FAIL: " << what << endl;
-	exit(0);
-}
-
-void exception_assert(const string& what, function<void()> closure) {
-
-	try {
-		closure();	
-		assertion_failure("Insertion index checking fail");
-	} catch(const exception& e) {
-		cout << "[Assertion]: Success" << endl;
-		cout << e.what() << endl;
-	}
-}
-
-
-
-void print(const string& name, const DynamicArray<int>& array) {
-	cout << name << ": ";
-	for(int i = 0; i < array.size(); i++) 
-		cout << array[i] << " ";
-	cout << endl;
-}
-
 int main() {
+
+	// normal circular array
+	//
+	// it inherits from DynamicArray
 	CircularArray<int> a;
 
+	// 
 	for(int i = 0 ; i < 10; i++)
 		a.append(i+1);
 
+	// circular indexing test
 	for(int i = 0; i < 21; i++) 
 		cout << a[i] << " ";
 	cout << endl;
 
-
-
+	// constness test
+	const CircularArray<int> b = a;
+	// negative circular indexing test
+	for(int i = -1; i >= -21; i--)
+		cout << a[i] << " ";
+	cout << endl;		
 
 	return 0;
 }
