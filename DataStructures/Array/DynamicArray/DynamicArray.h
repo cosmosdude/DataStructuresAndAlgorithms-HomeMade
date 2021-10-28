@@ -8,6 +8,7 @@
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
 
+// Dynamic array that can be resized.
 template<typename Element>
 class DynamicArray {
 
@@ -24,12 +25,16 @@ private:
 	void throw_if_invalid_indexing(int index) const {
 		// if the index out of bound, throw exception
 		if (index < 0 or index >= array_size) 
-			throw std::out_of_range("Array index out of bound");
+			throw std::out_of_range("Array access index out of bound");
+	}
+
+	size_t remaining_capacity() const noexcept {
+		return capacity() - size();
 	}
 
 	// check if the current array has reach it's capacity
 	bool is_capacity_reached() const noexcept {
-		return size() == capacity();
+		return 0 == remaining_capacity();
 	}
 
 	// increase capacity by 2.
@@ -51,12 +56,16 @@ private:
 		this->elements = new_buffer;
 	}
 
+
+	// shift the remaining partition of the array
+	// starting from the index.
+	void shift_array_at(int position) {
+		for(int i = size()-1; i >= position; i--) 
+			this->elements[i+1] = this->elements[i];
+	}
+
 	void shift_array() {
-		memcpy(
-			this->elements+1, 
-			this->elements, 
-			sizeof(Element)*size()
-		);	 
+		shift_array_at(0);
 	}
 
 public:
@@ -170,12 +179,20 @@ public:
 
 	#pragma mark Accessers
 	// Mutating subscript
+	// Get the element at the index
+	// or mutate the element at the index.
+	//
+	// Can throw array access index out of bound exception.
 	Element& operator[](int index) {
 		throw_if_invalid_indexing(index);
+		// return address to the element.
 		return this->elements[index];
 	}
 
 	// Nonmutating
+	// Get the element at the index
+	//
+	// Can throw array access index out of bound exception.
 	Element operator[](int index) const {
 		throw_if_invalid_indexing(index);
 		return this->elements[index];
@@ -199,7 +216,8 @@ public:
 
 
 	#pragma mark Modifiers
-	void prepend(const Element &item) {
+	// Append given element at the start of the list.
+	void prepend(const Element &item) noexcept {
 		// if the capacity reached, increase it.
 		if (is_capacity_reached()) increase_capacity();
 		// shift the array by 1.
@@ -211,12 +229,34 @@ public:
 	}
 
 	// append given element at the end of the list.
-	void append(const Element &item) {
+	void append(const Element &item) noexcept {
 		// if the capacity reached, increase it.
 		if(is_capacity_reached()) increase_capacity();
+		// append the item at the last index
+		// and increase the size of the array.
 		this->elements[array_size++] = item;
 	}
-	
+
+	// insert the element at the given index.
+	//
+	// Insertion position should be valid.
+	// i.e 0 <= position <= size
+	//
+	void insert(const Element& item, int position) {
+		// throw if the insertion index is invalid
+		throw_if_invalid_indexing(position);
+
+		// check if the array has reached it's capacity
+		// if so, increase the capacity
+		if (is_capacity_reached()) increase_capacity();
+
+		// Shift the array to the right starting from the given position.
+		shift_array_at(position);
+		// insert the element
+		this->elements[position] = item;
+		// increase the size
+		array_size++;
+	}
 
 };
 

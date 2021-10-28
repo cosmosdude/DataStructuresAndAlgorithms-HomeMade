@@ -32,6 +32,12 @@ int main() {
 	DynamicArray<int> b = {1, 2, 3, 4, 5};
 	print(b);
 
+	b.insert(999, 0);
+	print(b);
+
+	b.insert(999, b.size()-1);
+	print(b);
+
 
 	return 0;
 }
