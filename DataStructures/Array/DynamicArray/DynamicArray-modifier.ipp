@@ -16,6 +16,36 @@ void DynamicArray<Element>::prepend(const Element &item) noexcept {
 }
 
 
+// Append the contents of another dynamic array at the start of the list.
+//
+// let a = array
+// let b = array
+// # Time Complexity
+// O(an+bn)
+//
+template<typename Element>
+void DynamicArray<Element>::prepend(const DynamicArray<Element>& items) noexcept {
+	// calculate new capacity
+	const size_t new_capacity = size()+items.size();
+	// allocate big enough buffer
+	Element* new_buffer = new Element[new_capacity];
+
+	// copy contents of another array at the start of the buffer
+	memcpy(new_buffer, items.elements, sizeof(Element)*items.size());
+	// and copy old items into the remaining buffer
+	memcpy(new_buffer+items.size(), this->elements, sizeof(Element)*this->size());
+
+	// delete old buffer
+	delete[] this->elements;
+	// retain new buffer
+	this->elements = new_buffer;
+
+	// capacity and size will be the new allocated memory size
+	array_capacity = new_capacity;
+	array_size = new_capacity;
+}
+
+
 // append given element at the end of the list.
 //
 // complexity
@@ -30,6 +60,31 @@ void DynamicArray<Element>::append(const Element &item) noexcept {
 	this->elements[array_size++] = item;
 }
 
+
+template<typename Element>
+void DynamicArray<Element>::append(const DynamicArray<Element>& items) noexcept {
+	// calculate new capacity
+	const size_t new_capacity = size()+items.size();
+	// allocate big enough buffer
+	Element* new_buffer = new Element[new_capacity];
+
+	// and copy old items into the start of the buffer.
+	memcpy(new_buffer, this->elements, sizeof(Element)*this->size());
+	// copy contents from another array into the remaining buffer.
+	memcpy(new_buffer+this->size(), items.elements, sizeof(Element)*items.size());
+
+	// delete old buffer
+	delete[] this->elements;
+	// retain new buffer
+	this->elements = new_buffer;
+
+	// capacity and size will be the new allocated memory size
+	array_capacity = new_capacity;
+	array_size = new_capacity;
+}
+
+
+
 // insert the element at the given index.
 //
 // Insertion position should be valid.
@@ -37,7 +92,7 @@ void DynamicArray<Element>::append(const Element &item) noexcept {
 //
 // O(n)
 template<typename Element>
-void DynamicArray<Element>::insert(const Element& item, int position) {
+void DynamicArray<Element>::insert_at(int position, const Element& item) {
 	// throw if the insertion index is invalid
 	throw_if_invalid_indexing(position);
 
@@ -51,4 +106,34 @@ void DynamicArray<Element>::insert(const Element& item, int position) {
 	this->elements[position] = item;
 	// increase the size
 	array_size++;
+}
+
+
+// delete the element at the given index.
+template<typename Element>
+void DynamicArray<Element>::remove_at(int position) {
+
+	// throw if the deletion index is invalid
+	throw_if_invalid_indexing(position);
+
+	// if the delete position is the last index
+	// just reduce the size.
+	if (position == size()-1) array_size--;
+	// otherwise, delete the element at the position
+	// by shift the array towards the position
+	else {
+		shift_left_at(position);
+		array_size--;
+	}
+}
+
+
+template<typename Element>
+void DynamicArray<Element>::remove_front() {
+	this->remove_at(0);
+}
+
+template<typename Element>
+void DynamicArray<Element>::remove_back() {
+	this->remove_at(this->size()-1);
 }

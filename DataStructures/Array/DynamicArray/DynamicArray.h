@@ -70,6 +70,22 @@ private:
 		shift_array_at(0);
 	}
 
+	// shift everything to the left.
+	// The shift start from the given position.
+	// The shift results start from the shift_position-shift_count.
+	// If the shift result index is invalid, it is silently ignored.
+	void shift_left_at(int position, size_t skip_count = 1) {
+		// shift items
+		for(int i = position; i < size(); i++) {
+			// calculate shift index
+			int shift_index = i-int(skip_count);
+			// if the shift index is valid.
+			if (shift_index > -1) 
+				// shift item
+				this->elements[shift_index] = this->elements[i];
+		}
+	}
+
 public:
 
 	#pragma mark Constructors
@@ -151,6 +167,9 @@ public:
 	// avg: O(n)
 	void prepend(const Element &item) noexcept;
 
+	// Append the contents of another dynamic array at the start of the list.
+	void prepend(const DynamicArray<Element>& items) noexcept;
+
 	// append given element at the end of the list.
 	//
 	// complexity
@@ -158,13 +177,24 @@ public:
 	// avg: O(1)
 	void append(const Element &item) noexcept;
 
+	// Append the contents of another dynamic array at the end of the list.
+	void append(const DynamicArray<Element>& items) noexcept;
+
 	// insert the element at the given index.
 	//
 	// Insertion position should be valid.
 	// i.e 0 <= position <= size
 	//
 	// O(n)
-	void insert(const Element& item, int position);
+	void insert_at(int position, const Element& item);
+
+	// delete the element at the given index.
+	void remove_at(int position);
+
+	// delete the element at the start of the list.
+	void remove_front();
+	// delete the elemtn at the end of the list.
+	void remove_back();
 
 };
 

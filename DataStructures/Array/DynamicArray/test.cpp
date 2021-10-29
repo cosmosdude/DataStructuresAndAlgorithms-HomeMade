@@ -61,19 +61,32 @@ int main() {
 	print("b", b);
 
 	// insertion test
-	b.insert(999, 0); // start index
+	b.insert_at(0, 999); // start index
 	print("b", b);
-	b.insert(999, b.size()-1); // last index
+	b.insert_at(b.size()-1, 999); // last index
 	print("b", b);
 
 	// access index out of bound test
 	exception_assert("[fail]: Insertion index checking fail", [&]() {
-		b.insert(1000000, -999);
+		b.insert_at(-999, 1000000);
 	});
 
 	exception_assert("[fail]: Insertion index checking fail", [&]() {
-		b.insert(1000000, 999);
+		b.insert_at(999, 1000000);
 	});
+
+
+	DynamicArray<int> prepend_a = {1, 2, 3};
+	DynamicArray<int> prepend_b = {4, 5, 6};
+	prepend_b.prepend(prepend_a);
+	print("prepend array", prepend_b);
+
+	prepend_b.append(prepend_a);
+	print("append array", prepend_b);
+
+	prepend_b.remove_front();
+	prepend_b.remove_back();
+	print("remove front + remove back", prepend_b);
 
 
 
