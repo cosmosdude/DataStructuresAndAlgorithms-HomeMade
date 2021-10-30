@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <exception>
+#include <cmath>
 
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
@@ -155,6 +156,8 @@ public:
 	// Return the current size of the array.
 	size_t size() const noexcept;
 	// Size of the memory allocated by the dynamic array.
+	//
+	// Capacity will always be greater than or equal to the size of the array.
 	size_t capacity() const noexcept;
 	// test if the array is empty
 	bool is_empty() const noexcept;
@@ -180,6 +183,7 @@ public:
 	// Append the contents of another dynamic array at the end of the list.
 	void append(const DynamicArray<Element>& items) noexcept;
 
+	#pragma mark Insertion
 	// insert the element at the given index.
 	//
 	// Insertion position should be valid.
@@ -188,14 +192,29 @@ public:
 	// O(n)
 	void insert_at(int position, const Element& item);
 
+	#pragma mark Deletion
 	// delete the element at the given index.
+	// O(n)
 	void remove_at(int position);
-
 	// delete the element at the start of the list.
+	// O(n)
 	void remove_front();
 	// delete the elemtn at the end of the list.
+	// O(1)
 	void remove_back();
 
+	// Resize the array capacity to match it's size.
+	// No effect if the size and capacity is the same.
+	// O(n)
+	void resize();
+
+	// Resize the array to be given size.
+	// No effect if the size and capacity is the same.
+	// O(n)
+	//
+	// If the target size is greater than the current size
+	// Excess memory will be zero initialized.
+	void resize(size_t target_size);
 };
 
 #include "DynamicArray-constructors.ipp"

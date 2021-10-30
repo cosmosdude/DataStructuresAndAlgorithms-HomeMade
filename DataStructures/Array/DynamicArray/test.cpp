@@ -89,6 +89,19 @@ int main() {
 	print("remove front + remove back", prepend_b);
 
 
+	prepend_b.resize(3);
+	print("resize to 3:", prepend_b);
+	prepend_b.append(4);
+	print("append:", prepend_b);
+	cout << "Capacity after append:" << prepend_b.capacity() << endl;
+
+	prepend_b.resize();
+	cout << "Capacity after resize:" << prepend_b.capacity() << endl;	
+	prepend_b.resize(10);
+
+	cout << "Capacity after resize(10):" << prepend_b.capacity() << endl;	
+	cout << "Size after resize(10):" << prepend_b.size() << endl;
+	print("contents after resize(10):", prepend_b);	
 
 
 	return 0;

@@ -137,3 +137,50 @@ template<typename Element>
 void DynamicArray<Element>::remove_back() {
 	this->remove_at(this->size()-1);
 }
+
+
+template<typename Element>
+void DynamicArray<Element>::resize() {
+	// if the array is allocated more than it needs
+	// resize it
+	if (size() != capacity()) {
+		// allocate just enough buffer.
+		Element* new_buffer = new Element[size()];
+		// copy old contents into the new buffer
+		memcpy(new_buffer, this->elements, sizeof(Element)*size());
+		// delete old buffer
+		delete[] this->elements;
+		// retain new buffer
+		this->elements = new_buffer;
+		// equalize capacity and size
+		array_capacity = array_size;
+	}
+}
+
+
+template<typename Element>
+void DynamicArray<Element>::resize(size_t target_size) {
+	if (target_size != size()) {
+		// allocate large enough buffer
+		Element* new_buffer = new Element[target_size];
+		// copy elements from the old buffer to the new buffer.
+		// if the new buffer is bigger,
+		// let there be vacancies and junk values.
+		memcpy(
+			new_buffer, this->elements, 
+			sizeof(Element)*std::min(target_size, size())
+		);
+
+		// if the target size is greater then the previous size
+		if (target_size > size())
+			// zero initialize the excess memory
+			memset(new_buffer+size(), 0, sizeof(Element)*target_size-size());
+		// delete old buffer
+		delete[] this->elements;
+		// retain new buffer
+		this->elements = new_buffer;
+		array_size = target_size;
+		// equalize capacity and size
+		array_capacity = target_size;
+	}
+}
