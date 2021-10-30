@@ -3,8 +3,16 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <vector>
 
 using namespace std;
+
+class TestObject {
+	// TestObject();
+public:
+	TestObject(int a, int b) { }
+	~TestObject() {}
+};
 
 void assertion_failure(const string &what) {
 	cout << "[Assertion]-FAIL: " << what << endl;
@@ -103,6 +111,21 @@ int main() {
 	cout << "Size after resize(10):" << prepend_b.size() << endl;
 	print("contents after resize(10):", prepend_b);	
 
+
+	DynamicArray<DynamicArray<int>> array2d;
+	for(int i = 0 ; i < 10; i++) array2d.append(DynamicArray<int>());
+
+	for(int i = 0; i < array2d.size(); i++) {
+		for(int j = 0; j < 10; j++) {
+			array2d[i].append(j*i);
+		}
+	}
+
+	for(int i = 0; i < array2d.size(); i++) {
+		for(int j = 0; j < array2d[i].size(); j++) 
+			cout << array2d[i][j] << " ";
+		cout << endl;
+	}
 
 	return 0;
 }

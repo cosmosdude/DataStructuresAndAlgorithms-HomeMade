@@ -48,11 +48,9 @@ private:
 		Element* new_buffer = new Element[capacity()];
 
 		// copy old elements into the new buffer
-		memcpy(
-			new_buffer, 
-			this->elements, 
-			sizeof(Element)*size()
-		);	 
+		for(int i = 0; i < size(); i++)
+			new_buffer[i] = std::move(elements[i]);
+
 		// release old memory
 		delete[] this->elements;
 		// retain the new buffer
@@ -122,8 +120,12 @@ public:
 
 	#pragma mark Destructor
 	~DynamicArray() {
+		if (elements) std::cout << "deallocated" << std::endl;
 		// delete the elements.
 		delete[] this->elements;
+		this->array_size = 0;
+		this->array_capacity = 0;
+		this->elements = nullptr;
 	}
 
 	#pragma mark Accessers

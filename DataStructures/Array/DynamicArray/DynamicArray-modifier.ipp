@@ -30,10 +30,15 @@ void DynamicArray<Element>::prepend(const DynamicArray<Element>& items) noexcept
 	// allocate big enough buffer
 	Element* new_buffer = new Element[new_capacity];
 
-	// copy contents of another array at the start of the buffer
-	memcpy(new_buffer, items.elements, sizeof(Element)*items.size());
-	// and copy old items into the remaining buffer
-	memcpy(new_buffer+items.size(), this->elements, sizeof(Element)*this->size());
+	// When prepending items from the another array
+	// make sure the copy constructor is called
+	// by individually copying each item from that array
+	for(int i = 0; i < items.size(); i++)
+		new_buffer[i] = items[i];
+
+	// move old items
+	for(int i = 0; i < size(); i++) 
+		new_buffer[i+items.size()] = std::move(at(i));
 
 	// delete old buffer
 	delete[] this->elements;
@@ -64,14 +69,19 @@ void DynamicArray<Element>::append(const Element &item) noexcept {
 template<typename Element>
 void DynamicArray<Element>::append(const DynamicArray<Element>& items) noexcept {
 	// calculate new capacity
-	const size_t new_capacity = size()+items.size();
+	const size_t new_capacity = size() + items.size();
 	// allocate big enough buffer
 	Element* new_buffer = new Element[new_capacity];
 
-	// and copy old items into the start of the buffer.
-	memcpy(new_buffer, this->elements, sizeof(Element)*this->size());
-	// copy contents from another array into the remaining buffer.
-	memcpy(new_buffer+this->size(), items.elements, sizeof(Element)*items.size());
+	// Move the current elements into the new buffer
+	for(int i = 0; i < size(); i++) 
+		new_buffer[i] = std::move(at(i));
+
+	// When appending items from the another array
+	// make sure the copy constructor is called
+	// by individually copying each item from that array
+	for(int i = 0; i < items.size(); i++)
+		new_buffer[i+size()] = items[i];
 
 	// delete old buffer
 	delete[] this->elements;
@@ -146,8 +156,12 @@ void DynamicArray<Element>::resize() {
 	if (size() != capacity()) {
 		// allocate just enough buffer.
 		Element* new_buffer = new Element[size()];
-		// copy old contents into the new buffer
-		memcpy(new_buffer, this->elements, sizeof(Element)*size());
+
+		// Move required amount of old objects
+		for(int i = 0; i < size(); i++) 
+			new_buffer[i] = std::move(at(i));
+
+		// excess old object's destructors will be called here
 		// delete old buffer
 		delete[] this->elements;
 		// retain new buffer
@@ -163,24 +177,23 @@ void DynamicArray<Element>::resize(size_t target_size) {
 	if (target_size != size()) {
 		// allocate large enough buffer
 		Element* new_buffer = new Element[target_size];
-		// copy elements from the old buffer to the new buffer.
+
+		// move elements from the old buffer to the new buffer.
 		// if the new buffer is bigger,
 		// let there be vacancies and junk values.
-		memcpy(
-			new_buffer, this->elements, 
-			sizeof(Element)*std::min(target_size, size())
-		);
+		for(int i = 0; i < std::min(target_size, size()); i++) 
+			new_buffer[i] = std::move(i);
 
 		// if the target size is greater then the previous size
-		if (target_size > size())
-			// zero initialize the excess memory
-			memset(new_buffer+size(), 0, sizeof(Element)*target_size-size());
+		// excess values will be junk values.
+
 		// delete old buffer
 		delete[] this->elements;
 		// retain new buffer
 		this->elements = new_buffer;
-		array_size = target_size;
+
 		// equalize capacity and size
+		array_size = target_size;
 		array_capacity = target_size;
 	}
 }
