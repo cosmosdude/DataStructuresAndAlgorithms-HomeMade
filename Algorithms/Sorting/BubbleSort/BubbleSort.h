@@ -5,6 +5,9 @@
 #ifndef BUBBLESORT_H
 #define BUBBLESORT_H
 
+// Simple sort, Bubble sort
+//
+// O(n^2)
 struct BubbleSort {
 
 	template<typename T>

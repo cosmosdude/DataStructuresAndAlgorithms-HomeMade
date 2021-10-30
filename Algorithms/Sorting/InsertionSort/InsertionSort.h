@@ -10,6 +10,9 @@ using namespace std;
 #define INSERTIONSORT_H
 
 
+// Simple sort. Insertion sort
+//
+// O(n^2)
 struct InsertionSort {
 
 	// Sort the given array in given order.

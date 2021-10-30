@@ -9,7 +9,10 @@
 
 #include "../SortOrder.h"
 
+// Simple sort.
 // Selection sorting algorithm.
+//
+// O(n^2)
 //
 // How selection sort works?
 //
