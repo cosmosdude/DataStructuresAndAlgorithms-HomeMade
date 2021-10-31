@@ -11,7 +11,7 @@ void print(const vector<int>& arr) {
 }
 
 int main() {
-	vector<int> a = {5, 3, 1, 4, 2, 5, 3, 1, 4, 2, 5, 3, 1, 4, 2};
+	vector<int> a = {1000, 3, 1, 4, 2, 5, 3, 1, 4, 2, 5, 3, 1, 4, 2};
 
 	BubbleSort::sort(a);
 	print(a);
