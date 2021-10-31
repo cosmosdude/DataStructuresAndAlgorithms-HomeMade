@@ -9,5 +9,5 @@ do
 	$COMPILE $i
 done
 
-$COMPILER *.o -o test.out
+$LINK
 
