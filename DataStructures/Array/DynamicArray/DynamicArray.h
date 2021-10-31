@@ -120,7 +120,6 @@ public:
 
 	#pragma mark Destructor
 	~DynamicArray() {
-		if (elements) std::cout << "deallocated" << std::endl;
 		// delete the elements.
 		delete[] this->elements;
 		this->array_size = 0;
