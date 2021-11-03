@@ -2,11 +2,11 @@
 #define NODE_H
 
 template<typename T>
-struct Node {
+struct ForwardNode {
 	T element;
-	Node<T> *next;
+	ForwardNode<T> *next;
 
-	Node(const T& e):
+	ForwardNode(const T& e):
 	element(e), next(nullptr) {}
 };
 

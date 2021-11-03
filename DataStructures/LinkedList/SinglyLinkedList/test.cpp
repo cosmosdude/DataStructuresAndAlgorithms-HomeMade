@@ -51,6 +51,8 @@ int main() {
 	list.remove_back();
 	list.print();
 
+	cout << list.size() << endl;
+
 
 
 

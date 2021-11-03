@@ -15,9 +15,9 @@ class SinglyLinkedList {
 private:
 	size_t list_size;
 	// head pointer
-	Node<T>* head;
+	ForwardNode<T>* head;
 	// tail pointer
-	Node<T>* tail;
+	ForwardNode<T>* tail;
 
 	void throw_if_invalid_indexing(int index) const {
 		if (index < 0 or index >= size())
@@ -52,7 +52,7 @@ public:
 	bool is_empty() const;
 
 	void print() {
-		Node<T>* ptr = head;
+		ForwardNode<T>* ptr = head;
 		cout << "[";
 		while(ptr) {
 			cout << ptr->element;
@@ -95,7 +95,7 @@ template<typename T>
 void SinglyLinkedList<T>::add_front(const T& element) {
 
 	// create a pointer.
-	Node<T> * ptr = new Node<T>(element);
+	ForwardNode<T> * ptr = new ForwardNode<T>(element);
 
 	// if the list is empty
 	if (is_empty()) {
@@ -115,7 +115,7 @@ template<typename T>
 void SinglyLinkedList<T>::add_back(const T& element) {
 
 	// create a pointer.
-	Node<T> * ptr = new Node<T>(element);
+	ForwardNode<T> * ptr = new ForwardNode<T>(element);
 	// if the list is empty
 	if (is_empty()) {
 		// both head and tail will be the ptr.
@@ -138,15 +138,15 @@ void SinglyLinkedList<T>::insert_at(int index, const T& element) {
 
 	// 0 1 2 3
 	// 
-	Node<T>* left_ptr = nullptr;
-	Node<T>* right_ptr = head;
+	ForwardNode<T>* left_ptr = nullptr;
+	ForwardNode<T>* right_ptr = head;
 
 	for(int i = 1; i <= index; i++) {
 		left_ptr = right_ptr;
 		right_ptr = right_ptr->next;
 	}
 
-	Node<T>* new_ptr = new Node<T>(element);
+	ForwardNode<T>* new_ptr = new ForwardNode<T>(element);
 
 	// put new_ptr between left_ptr and right_ptr
 	if (left_ptr) left_ptr->next = new_ptr;
@@ -164,8 +164,8 @@ void SinglyLinkedList<T>::remove_at(int index) {
 	throw_if_invalid_indexing(index);
 	// 0 1 2 3
 	// 
-	Node<T>* left_ptr = nullptr;
-	Node<T>* remove_ptr = head;
+	ForwardNode<T>* left_ptr = nullptr;
+	ForwardNode<T>* remove_ptr = head;
 
 	for(int i = 1; i <= index; i++) {
 		left_ptr = remove_ptr;
