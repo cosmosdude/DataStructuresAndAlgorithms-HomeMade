@@ -19,6 +19,6 @@ struct BidirectionalNode {
 	BidirectionalNode(const T& e):
 	element(e), next(nullptr), previous(nullptr)
 	{}
-}
+};
 
 #endif
