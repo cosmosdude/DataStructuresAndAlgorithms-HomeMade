@@ -1,15 +1,15 @@
-#include "PriorityItem.h"
+#include "../PriorityItem.h"
 
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <exception>
 
-#ifndef MAXHEAP_H
-#define MAXHEAP_H
+#ifndef MINHEAP_H
+#define MINHEAP_H
 
 template<typename T>
-struct MaxHeap {
+struct MinHeap {
 
 private:
 	// underlying contents;
@@ -38,7 +38,7 @@ public:
 
 
 template<typename T>
-void MaxHeap<T>::push(int priority, const T& element) {
+void MinHeap<T>::push(int priority, const T& element) {
 
 	// add element to the last
 	elements.push_back(PriorityItem<T>(priority, element));
@@ -50,7 +50,7 @@ void MaxHeap<T>::push(int priority, const T& element) {
 		// make sure it is not the root node
 		parent_index > -1 and 
 		// compare the priorities and make sure the priority is high
-		elements[index].priority > elements[parent_index].priority
+		elements[index].priority < elements[parent_index].priority
 	) {
 		swap(elements[index], elements[parent_index]);
 		index = parent_index;
@@ -60,7 +60,7 @@ void MaxHeap<T>::push(int priority, const T& element) {
 }
 
 template<typename T>
-void MaxHeap<T>::pop() {
+void MinHeap<T>::pop() {
 	// TODO: Throw if empty
 	if_empty_throw_with("Unable to pop empty heap.");
 
@@ -89,11 +89,11 @@ void MaxHeap<T>::pop() {
 			// if both children have better priority
 			// swap with the children with best priority
 			if (
-				elements[left].priority > elements[index].priority and 
-				elements[right].priority > elements[index].priority
+				elements[left].priority < elements[index].priority and 
+				elements[right].priority < elements[index].priority
 			) {
 				int best_child = index;
-				if (elements[left].priority > elements[right].priority) best_child = left;
+				if (elements[left].priority < elements[right].priority) best_child = left;
 				else best_child = right;
 
 				swap(elements[index], elements[best_child]);
@@ -101,13 +101,13 @@ void MaxHeap<T>::pop() {
 			}
 			// if the left child have better priority
 			// swap with it
-			else if (elements[left].priority > elements[index].priority) {
+			else if (elements[left].priority < elements[index].priority) {
 				swap(elements[index], elements[left]);
 				index = left;
 			}
 			// if the right child have better priority
 			// swap with it
-			else if (elements[right].priority > elements[index].priority) {
+			else if (elements[right].priority < elements[index].priority) {
 				swap(elements[index], elements[right]);
 				index = right;
 			}
@@ -118,7 +118,7 @@ void MaxHeap<T>::pop() {
 		else {
 			// swap if the left element has better priority
 			// than the current one
-			if (elements[index].priority < elements[left].priority) {
+			if (elements[index].priority > elements[left].priority) {
 				swap(elements[index], elements[left]);
 				// then the current index become the left
 				index = left;
@@ -140,7 +140,7 @@ void MaxHeap<T>::pop() {
 
 // peek the highest priority element. 
 template<typename T>
-T MaxHeap<T>::peek() const {
+T MinHeap<T>::peek() const {
 	// TODO: Throw if empty.
 	if_empty_throw_with("Unable to peek empty heap.");
 
@@ -148,12 +148,12 @@ T MaxHeap<T>::peek() const {
 }
 
 template<typename T>
-size_t MaxHeap<T>::size() const noexcept {
+size_t MinHeap<T>::size() const noexcept {
 	return elements.size();
 }
 
 template<typename T>
-bool MaxHeap<T>::is_empty() const noexcept {
+bool MinHeap<T>::is_empty() const noexcept {
 	return elements.size() == 0;
 }
 
