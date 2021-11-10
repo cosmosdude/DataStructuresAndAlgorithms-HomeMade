@@ -16,7 +16,7 @@ private:
 	std::vector<PriorityItem<T>> elements;
 
 	// throw with message if the heap is empty.
-	void if_empty_throw_with(const std::string message) {
+	void if_empty_throw_with(const std::string message) const {
 		if (is_empty()) throw std::out_of_range(message);
 	}
 
