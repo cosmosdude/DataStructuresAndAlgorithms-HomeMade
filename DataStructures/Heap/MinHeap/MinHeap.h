@@ -52,7 +52,7 @@ void MinHeap<T>::push(int priority, const T& element) {
 		// compare the priorities and make sure the priority is high
 		elements[index].priority < elements[parent_index].priority
 	) {
-		swap(elements[index], elements[parent_index]);
+		std::swap(elements[index], elements[parent_index]);
 		index = parent_index;
 		parent_index = (index-1)/2;
 	}
@@ -96,19 +96,19 @@ void MinHeap<T>::pop() {
 				if (elements[left].priority < elements[right].priority) best_child = left;
 				else best_child = right;
 
-				swap(elements[index], elements[best_child]);
+				std::swap(elements[index], elements[best_child]);
 				index = best_child;
 			}
 			// if the left child have better priority
 			// swap with it
 			else if (elements[left].priority < elements[index].priority) {
-				swap(elements[index], elements[left]);
+				std::swap(elements[index], elements[left]);
 				index = left;
 			}
 			// if the right child have better priority
 			// swap with it
 			else if (elements[right].priority < elements[index].priority) {
-				swap(elements[index], elements[right]);
+				std::swap(elements[index], elements[right]);
 				index = right;
 			}
 			// otherwise, stop the process
@@ -119,7 +119,7 @@ void MinHeap<T>::pop() {
 			// swap if the left element has better priority
 			// than the current one
 			if (elements[index].priority > elements[left].priority) {
-				swap(elements[index], elements[left]);
+				std::swap(elements[index], elements[left]);
 				// then the current index become the left
 				index = left;
 			}
