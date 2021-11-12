@@ -51,7 +51,7 @@ void MaxHeap<T>::siftup(int i) {
 	// and sift up again
 	if (elements[i].priority > elements[parent].priority) {
 		// swap them
-		swap(elements[parent], elements[i]);
+		std::swap(elements[parent], elements[i]);
 		// sift up again
 		siftup(parent);
 	}
@@ -80,7 +80,7 @@ void MaxHeap<T>::siftdown(int i) {
 	// swap them
 	// and siftdown again
 	if (best != i) {
-		swap(elements[i], elements[best]);
+		std::swap(elements[i], elements[best]);
 		siftdown(best);
 	}
 }
