@@ -20,6 +20,9 @@ private:
 		if (is_empty()) throw std::out_of_range(message);
 	}
 
+	void siftup(int i);
+	void siftdown(int i);
+
 public:
 
 	//
@@ -38,24 +41,58 @@ public:
 
 
 template<typename T>
+void MaxHeap<T>::siftup(int i) {
+	// calculate parent
+	int parent = (i-1)/2;
+	// if parent is not valid, stop
+	if (parent < 0) return;
+	// if the current index has better priority
+	// than the parent, swap them
+	// and sift up again
+	if (elements[i].priority > elements[parent].priority) {
+		// swap them
+		swap(elements[parent], elements[i]);
+		// sift up again
+		siftup(parent);
+	}
+}
+
+template<typename T>
+void MaxHeap<T>::siftdown(int i) {
+	//
+	int best = i;
+	int left = i*2+1;
+	int right = i*2+2;
+
+	// if the left index is valid
+	// and it's element has better priority than current best
+	// let it be the best
+	if (left < size() and elements[left].priority > elements[best].priority)
+		best = left;
+
+	// if the right index is valid
+	// and it's element has better priority than current best
+	// let it be the best
+	if (right < size() and elements[right].priority > elements[best].priority)
+		best = right;
+
+	// if there is any best child found
+	// swap them
+	// and siftdown again
+	if (best != i) {
+		swap(elements[i], elements[best]);
+		siftdown(best);
+	}
+}
+
+template<typename T>
 void MaxHeap<T>::push(int priority, const T& element) {
 
 	// add element to the last
 	elements.push_back(PriorityItem<T>(priority, element));
 
 	// swap until the heap is right
-	int index = elements.size()-1;
-	int parent_index = (index-1)/2;
-	while(
-		// make sure it is not the root node
-		parent_index > -1 and 
-		// compare the priorities and make sure the priority is high
-		elements[index].priority > elements[parent_index].priority
-	) {
-		std::swap(elements[index], elements[parent_index]);
-		index = parent_index;
-		parent_index = (index-1)/2;
-	}
+	siftup(elements.size()-1);
 
 }
 
@@ -73,67 +110,7 @@ void MaxHeap<T>::pop() {
 	// if the element became empty, just simply return
 	if (elements.empty()) return;
 
-	// otherwise, maintain heap property
-	int index = 0;
-	int left = (index*2)+1;
-	int right = (index*2)+2;
-
-	bool left_isvalid = left < size();
-	bool right_isvalid = right < size();
-	bool is_leaf = not left_isvalid and not right_isvalid;
-
-	while(not is_leaf) {
-
-		// double node
-		if (right_isvalid) {
-			// if both children have better priority
-			// swap with the children with best priority
-			if (
-				elements[left].priority > elements[index].priority and 
-				elements[right].priority > elements[index].priority
-			) {
-				int best_child = index;
-				if (elements[left].priority > elements[right].priority) best_child = left;
-				else best_child = right;
-
-				std::swap(elements[index], elements[best_child]);
-				index = best_child;
-			}
-			// if the left child have better priority
-			// swap with it
-			else if (elements[left].priority > elements[index].priority) {
-				std::swap(elements[index], elements[left]);
-				index = left;
-			}
-			// if the right child have better priority
-			// swap with it
-			else if (elements[right].priority > elements[index].priority) {
-				std::swap(elements[index], elements[right]);
-				index = right;
-			}
-			// otherwise, stop the process
-			else break;
-		}
-		// left node only
-		else {
-			// swap if the left element has better priority
-			// than the current one
-			if (elements[index].priority < elements[left].priority) {
-				std::swap(elements[index], elements[left]);
-				// then the current index become the left
-				index = left;
-			}
-			// Otherwise, it's done.
-			// just break the process
-			else break;
-		}
-
-		// calculate next index;
-		left = (index*2)+1; right = left+1;
-		left_isvalid = left < size();
-		right_isvalid = right < size();
-		is_leaf = not left_isvalid and not right_isvalid;
-	}
+	siftdown(0);
 }
 
 
